@@ -1,0 +1,267 @@
+================================================================================
+BHARTHI DSA VISUALIZER - REAL-TIME LEARNING PLATFORM ARCHITECTURE SPECIFICATION
+File: lu.txt
+Institution: Kumaraguru College of Technology (KCT) - Department of CSE
+Course Code: 23CS401 Design and Analysis of Algorithms (DAA) Laboratory & Theory
+UI Theme: Clean White and Light Blue (#0284C7, #0EA5E9, #38BDF8, #E0F2FE, #F8FAFC)
+Generated: 2026-10-17
+================================================================================
+
+1. SYSTEM OVERVIEW
+--------------------------------------------------------------------------------
+Bharthi DSA Visualizer is a real-time, interactive educational web platform
+specifically engineered for undergraduate Computer Science students at Kumaraguru
+College of Technology (KCT). It transforms abstract algorithmic concepts into
+live, interactive sensory experiences through synchronized visual state transitions,
+algorithmic audio synthesis, real-time peer collaboration simulation, multi-algorithm
+racing benchmarks, and automated exam dry-run worksheets.
+
+Primary Capabilities:
+- Real-time Animation Canvas: Visual representations for Sorting, Searching,
+  Stack (LIFO canister), Queue (FIFO pipeline), Graph (BFS levels), Dynamic
+  Programming (0/1 Knapsack matrix), and Backtracking (N-Queens chessboard).
+- Web Audio API Sound Synthesizer: Dynamic pitch mapping for array comparisons,
+  swaps, tree visits, and algorithmic completion chimes.
+- Real-Time Collaborative Classroom: Peer activity streams, real-time online student
+  counter, live DAA viva doubt-solving board, and weekly challenge leaderboards.
+- Multi-Algorithm Race Arena: Synchronous side-by-side execution of 2 algorithms
+  on identical datasets with live operation counters and podium announcements.
+- Exam Dry Run Worksheet Generator: Tabular trace of passes, pointers, and memory
+  with 1-click CSV export and Markdown formatting for university lab record books.
+- Interactive Master Theorem Solver: Solves T(n) = aT(n/b) + Theta(n^k) with
+  parameter sliders, logarithmic threshold math, and visual recursion tree layers.
+
+
+2. ARCHITECTURE DIAGRAM & COMPONENT TOPOLOGY
+--------------------------------------------------------------------------------
+
+                     +---------------------------------------+
+                     |           index.html Entry            |
+                     |   Plus Jakarta Sans & JetBrains Mono  |
+                     +---------------------------------------+
+                                         |
+                                         v
+                     +---------------------------------------+
+                     |             src/main.tsx              |
+                     |         React 19 Root Mount           |
+                     +---------------------------------------+
+                                         |
+                                         v
+                     +---------------------------------------+
+                     |              src/App.tsx              |
+                     |   Central Application Controller &    |
+                     |       Navigation State Machine        |
+                     +---------------------------------------+
+                                         |
+         +-------------------------------+-------------------------------+
+         |                               |                               |
+         v                               v                               v
++------------------+           +-------------------+           +------------------+
+|  Top Navbar &    |           | Left Syllabus     |           | SoundSynthesizer |
+|  Audio Controller|           | Drawer (16 Units) |           |  (Web Audio API) |
++------------------+           +-------------------+           +------------------+
+         |
+         +---------------------------------------------------------------+
+         |                   Active View Router                          |
+         +---------------------------------------------------------------+
+         |
+         |---> [home]: Hero Dashboard, 4 Metric Cards, 3 Tracks, 16 Category Grid
+         |
+         |---> [classroom]: LiveClassroomSession
+         |         |-- Real-time Student Counter & Heartbeat Ticker
+         |         |-- Live Peer Activity Feed (Mock Socket / Real-Time Pulse)
+         |         |-- Interactive Q&A Doubts Stream with Faculty Verified Answers
+         |         |-- Lab Challenge Modules & Weekly Student Leaderboard
+         |
+         |---> [visualizer]: Algorithm Visualizer Workspace
+         |         |-- Commentary & RealtimeVariableWatcher (Registers & Invariants)
+         |         |-- VisualizerCanvas (Bars, Stacks, Queues, Graphs, DP Tables, Boards)
+         |         |-- PlaybackDeck (Play/Pause, Step Fwd/Back, Speed, Scrubber, Presets)
+         |         |-- Tabs:
+         |             |-- Walkthrough: ComplexityCard + CodeTraceView
+         |             |-- Prediction Quiz: StepPredictionQuiz (Streak & Sound FX)
+         |             |-- Dry Run: DryRunWorksheet (Table, CSV Export, MD Copy)
+         |             |-- Code Trace: CodeTraceView (C++, Java, Python, Pseudo)
+         |
+         |---> [compare]: AlgorithmComparator (Synchronous Dual-Algorithm Race Arena)
+         |         |-- Track A vs Track B with Live Progress Bars & Timers
+         |         |-- Live Comparison & Swap Counter Gauges
+         |         |-- Winner Podium with Asymptotic Efficiency Analysis
+         |
+         |---> [master_theorem]: MasterTheoremSolver
+         |         |-- Interactive Sliders for a, b, k
+         |         |-- Case 1, 2, 3 Boundary Calculation
+         |         |-- Recursion Tree Visualizer with Level-by-Level Work Breakdown
+         |
+         |---> [category]: Category Detail View & Module Launcher
+
+
+3. DIRECTORY & CODEBASE STRUCTURE
+--------------------------------------------------------------------------------
+/
+├── index.html                     # HTML5 Entry point, fonts & SEO metadata
+├── package.json                   # Dependencies, build scripts & lint config
+├── tsconfig.json                  # TypeScript compiler settings
+├── vite.config.ts                 # Vite bundler configuration (Port 3000)
+├── lu.txt                         # Full Architecture Specification
+├── src/
+│   ├── main.tsx                   # React client bootstrap
+│   ├── index.css                  # Global Tailwind CSS directives & typography
+│   ├── App.tsx                    # Primary view router, state coordinator, HUD
+│   │
+│   ├── components/
+│   │   ├── AlgorithmComparator.tsx    # Multi-algorithm synchronous race arena
+│   │   ├── CodeTraceView.tsx          # 4-language synchronized code line trace
+│   │   ├── ComplexityCard.tsx         # Big-O asymptotic matrix & KCT exam notes
+│   │   ├── DryRunWorksheet.tsx        # Exam trace table with CSV/Markdown export
+│   │   ├── LiveClassroomSession.tsx   # Real-time lab room, doubts stream & ranks
+│   │   ├── MasterTheoremSolver.tsx    # Recurrence solver & visual recursion tree
+│   │   ├── PlaybackDeck.tsx           # Stepper, scrubber, audio toggle & inputs
+│   │   ├── RealtimeVariableWatcher.tsx# Live registers, counters & loop invariants
+│   │   ├── StepPredictionQuiz.tsx     # Interactive quiz with streak tracking
+│   │   └── VisualizerCanvas.tsx       # Dynamic multi-paradigm graphic canvas
+│   │
+│   ├── data/
+│   │   └── daaData.ts             # 16 Categories, 184 Lessons, step generators:
+│   │                              # Bubble, Selection, Insertion, Binary Search,
+│   │                              # Stack, Queue, Graph BFS, Knapsack DP, N-Queens
+│   │
+│   └── utils/
+│       └── soundEffects.ts        # Web Audio API frequency synthesizer engine
+
+
+4. CORE DATA SCHEMAS & INTERFACES (src/data/daaData.ts)
+--------------------------------------------------------------------------------
+- AlgorithmCategory:
+  {
+    id: string;               // e.g., 'cat_sorting'
+    indexStr: string;         // '06'
+    title: string;            // 'Sorting Algorithms'
+    lessonCount: number;      // 18
+    description: string;      // Curricular description
+    iconName: string;         // Lucide icon name
+  }
+
+- AlgorithmItem:
+  {
+    id: string;               // 'bubble_sort'
+    categoryId: string;       // 'cat_sorting'
+    name: string;             // 'Bubble Sort'
+    shortDesc: string;        // High-level intuition
+    complexity: ComplexityInfo; // Best, Average, Worst, Space, InPlace, Stability
+    defaultInput: number[];   // [65, 35, 45, 90, 55, 75]
+    codeSnippets: CodeSnippet;// { cpp, java, python, pseudo }
+    commonMistake: string;    // Common viva / exam mistake
+    kctExamTip: string;       // Academic advice for university tests
+    glossary: GlossaryItem[]; // Academic terms and definitions
+  }
+
+- AlgorithmStep:
+  {
+    stepIndex: number;
+    totalSteps: number;
+    description: string;
+    codeLine: number;
+    arrayState?: number[];
+    activeIndices?: number[];   // Elements being compared (Amber glow)
+    swappedIndices?: number[];  // Elements being swapped (Rose glow)
+    sortedIndices?: number[];   // Elements settled in place (Emerald glow)
+    pivotIndex?: number;        // Active partition pivot or mid
+    targetIndex?: number;       // Search target index
+    stackState?: string[];      // LIFO stack canister state
+    queueState?: string[];      // FIFO queue pipeline state
+    graphNodes?: GraphNodeState[]; // Node coordinates, visit status & distance
+    graphEdges?: GraphEdgeState[]; // Edge connections & highlights
+    dpTable?: DpTableState;     // Matrix grid, row/col headers, active cells
+    queensPlacement?: number[]; // Chessboard row-column placements
+    variables: Record<string, string>; // Dynamic CPU registers (i, j, key, etc.)
+    comparisonsCount?: number;
+    swapsCount?: number;
+    quiz?: QuizQuestion;
+  }
+
+
+5. REAL-TIME SUB-SYSTEMS IN DETAIL
+--------------------------------------------------------------------------------
+A. Web Audio API Synthesizer (src/utils/soundEffects.ts):
+   - Generates tones directly in browser memory without external MP3/WAV assets.
+   - Frequency Mapping: Maps array values (10 to 100) onto pitch scale 220Hz - 1046Hz
+     using triangle oscillator waves for smooth pleasant tone.
+   - Swap Swoop: Sawtooth wave glide ramping from 600Hz down to 260Hz.
+   - Comparison Ping: Crisp 440Hz sine burst (0.05s duration).
+   - Success Fanfare: Ascending arpeggio across C5 (523Hz), E5 (659Hz), G5 (784Hz),
+     and C6 (1046Hz).
+   - Global volume regulation with full Mute/Unmute support across UI buttons.
+
+B. Live Classroom Session (src/components/LiveClassroomSession.tsx):
+   - Simulated real-time WebSocket/peer heartbeat stream with pulse indicators.
+   - Online student activity counter fluctuating between 28 and 52 active students.
+   - Real-time peer activity stream: records peers completing dry runs and quizzes.
+   - Interactive Doubts Stream: Students can submit viva questions by topic.
+     Automated faculty AI mentor answers with academic correctness within 2.5s.
+   - KCT Lab Challenge Tasks with 10-20 marks point allocations.
+
+C. Multi-Algorithm Race Arena (src/components/AlgorithmComparator.tsx):
+   - Independent step tracking for Racer 1 (Track A) and Racer 2 (Track B).
+   - Real-time tick timer running at 120ms intervals.
+   - Dynamic progress calculations (% complete = step / totalSteps).
+   - Visual race track showing live array mutations side-by-side.
+   - Auto-detection of winner with comparison efficiency calculation.
+
+D. Real-time Variable Watcher & Invariant HUD (src/components/RealtimeVariableWatcher.tsx):
+   - Live displays of comparison counters and memory swaps.
+   - Dynamically mapped register pills displaying CPU state (e.g. i=3, j=4, min=1).
+   - Formal loop invariant statement for university lab examinations.
+
+E. Interactive Playback Deck (src/components/PlaybackDeck.tsx):
+   - Slider scrubber: Drag smoothly across 0% to 100% of execution timeline.
+   - Speed multipliers: 0.5x, 1x, 2x, 4x.
+   - Automated transport loop with edge-case protection (stops at steps.length - 1).
+   - Presets: Random 8, Nearly Sorted (Best Case), Inverted (Worst Case), and
+     custom array modal input parser.
+
+F. Master Theorem Solver (src/components/MasterTheoremSolver.tsx):
+   - Real-time computation of critical exponent log_b(a).
+   - Comparison with polynomial exponent k against precision epsilon 0.001:
+     * Case 1: k < log_b(a) -> Theta(n^(log_b a))
+     * Case 2: k = log_b(a) -> Theta(n^k log n)
+     * Case 3: k > log_b(a) -> Theta(n^k)
+   - Visual recursion tree depth layers: Level 0 (cn^k), Level 1 (a*c(n/b)^k),
+     Level 2 (a^2*c(n/b^2)^k), and Leaf Count (n^(log_b a)).
+
+G. Dry Run Worksheet (src/components/DryRunWorksheet.tsx):
+   - Tabular trace corresponding to Anna University / KCT DAA record standards.
+   - 1-Click CSV file generator via data URI encoding.
+   - 1-Click Markdown table clipboard copy.
+   - Row click listener: Jumps canvas visualizer directly to the clicked step index.
+
+
+6. UI & VISUAL DESIGN CONSTITUTION
+--------------------------------------------------------------------------------
+- Dominant Aesthetic: Clean, bright, academic White and Light Blue palette.
+- Primary Canvas: #F8FAFC (Slate-50) with subtle radial sky glow.
+- Surface Cards: Pure White (#FFFFFF) with 1px border (#E0F2FE, sky-100) and
+  soft box shadow (shadow-sky-100/40).
+- Primary Accent: Sky-600 (#0284C7) and Blue-600 (#2563EB).
+- Secondary Accents:
+  * Amber-500 (#F59E0B) for active comparison and pivot highlights.
+  * Rose-500 (#F43F5E) for swaps, inversions, and front pointers.
+  * Emerald-500 (#10B981) for sorted elements and verified quiz answers.
+- Typography:
+  * Headers and UI: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif.
+  * Code, Registers, Math & Matrices: 'JetBrains Mono', monospace.
+- Accessibility: High contrast ratio (>4.5:1), clear active indicators, zero
+  ambiguity in button actions.
+
+
+7. BUILD & RUNTIME PIPELINE
+--------------------------------------------------------------------------------
+- Runtime Engine: Node.js 20+ with Vite 6.
+- Frontend Framework: React 19 with TypeScript 5.7.
+- Styling Engine: Tailwind CSS v4 with modern @import "tailwindcss" syntax.
+- Icons: lucide-react.
+- Dev Server: Running on 0.0.0.0:3000.
+- Build Validation: npm run lint (tsc --noEmit) and npm run build (vite build).
+================================================================================
+END OF ARCHITECTURE SPECIFICATION - BHARTHI DSA VISUALIZER
+================================================================================
